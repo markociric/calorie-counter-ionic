@@ -1,0 +1,65 @@
+/* src/app/pages/admin/admin.page.scss */
+
+.example-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+ion-content.admin-content {
+  --background: linear-gradient(135deg, #eae866, #46c843);
+  position: relative;
+}
+
+.admin-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 32px 24px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+}
+
+.admin-container h2 {
+  margin-bottom: 16px;
+  color: #222;
+  font-weight: 600;
+}
+
+
+
+/* Tabela zauzima punu širinu unutar table-wrapper */
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Zaglavlje je sticky i fiksirano na vrhu scroll kontejnera */
+.user-table thead th {
+  position: sticky;
+  top: 0;
+  background: #28c840;
+  color: #fff;
+  font-weight: 500;
+  padding: 8px;
+  text-align: left;
+  z-index: 1;
+}
+
+/* Parni redovi imaju svetliju sivu pozadinu */
+.user-table tbody tr:nth-child(even) {
+  background: #f6f6f6;
+}
+
+/* Ćelije imaju tamnu boju teksta */
+.user-table td {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}

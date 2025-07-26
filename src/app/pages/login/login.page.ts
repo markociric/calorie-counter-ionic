@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService, LoginResponse } from '../../services/auth.service';
+import { jwtDecode } from 'jwt-decode';
 
+interface JwtPayload {
+  authorities?: string[];
+}
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -9,7 +13,7 @@ import { AuthService } from '../../services/auth.service';
   standalone:false,
 })
 export class LoginPage {
-  username = '';
+username = '';
   password = '';
   passwordVisible = false;
 
@@ -21,16 +25,32 @@ export class LoginPage {
       return;
     }
 
-    this.authService.login({ username: this.username, password: this.password }).subscribe({
-      next: (res) => {
-        if (!res) return;
-        // TODO: Sačuvaj token ako backend šalje
-        this.router.navigate(['/dashboard']);
-      },
-      error: () => {
-        alert('Login neuspešan');
-      },
-    });
+    this.authService
+      .login({ username: this.username, password: this.password })
+      .subscribe({
+        next: (res: LoginResponse) => {
+          // Sačuvaj tokene
+          localStorage.setItem('accessToken', res.accessToken);
+          localStorage.setItem('refreshToken', res.refreshToken);
+          if (res.refreshTokenExpiry) {
+            localStorage.setItem('refreshTokenExpiry', res.refreshTokenExpiry);
+          }
+
+          // Dekodiraj JWT i izvuci role
+          const decoded = jwtDecode<JwtPayload>(res.accessToken);
+          const roles = decoded.authorities || [];
+
+          // Preusmeri na /admin ili /dashboard
+          if (roles.includes('ROLE_ADMIN')) {
+            this.router.navigate(['/admin']);
+          } else {
+            this.router.navigate(['/dashboard']);
+          }
+        },
+        error: () => {
+          alert('Login neuspešan');
+        },
+      });
   }
 
   togglePassword() {

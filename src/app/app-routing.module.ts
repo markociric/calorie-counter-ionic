@@ -5,25 +5,34 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'login',
-    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
   },
   {
     path: 'register',
-    loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
+    loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterPageModule)
   },
-  {
+ {
     path: 'dashboard',
-    loadChildren: () => import('./pages/dashboard/dashboard.module').then( m => m.DashboardPageModule)
+    loadChildren: () =>
+      import('./pages/dashboard-tabs/dashboard-tabs.module')
+        .then(m => m.DashboardTabsPageModule),
   },
   {
     path: 'history',
-    loadChildren: () => import('./pages/history/history.module').then( m => m.HistoryPageModule)
+    loadChildren: () => import('./pages/history/history.module').then(m => m.HistoryPageModule)
   },
+  { path: 'admin', redirectTo: 'tabs/users', pathMatch: 'full' },
   {
-    path: 'admin',
-    loadChildren: () => import('./pages/admin/admin.module').then( m => m.AdminPageModule)
+    path: 'tabs',
+    loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
   },
 
+  { path: 'add-food', redirectTo: 'tabs/add-food', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' },
+  {
+    path: 'dashboard-tabs',
+    loadChildren: () => import('./pages/dashboard-tabs/dashboard-tabs.module').then( m => m.DashboardTabsPageModule)
+  }
 ];
 @NgModule({
   imports: [
@@ -31,4 +40,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
