@@ -68,25 +68,36 @@ export class AddFoodPage implements OnInit {
 
   // Ažuriraj kalorije
   async updateCalories(id: number) {
-    const cal = this.newCalories[id];
-    this.foodService.updateFoodItem(id, cal).subscribe({
-      next: async (updated: FoodItem) => {
-        const t = await this.toastCtrl.create({
-          message: `Ažurirano: ${updated.name}`,
-          duration: 1500,
-        });
-        await t.present();
-        this.loadItems();
-      },
-      error: async () => {
-        const t = await this.toastCtrl.create({
-          message: 'Greška pri ažuriranju.',
-          duration: 1500,
-        });
-        await t.present();
-      },
-    });
-  }
+  // 1) Nađi originalni item iz liste
+  const original = this.foodItems.find(i => i.id === id);
+  if (!original) { return; }
+
+  // 2) Kloniraj i promeni kalorije
+  const updated: FoodItem = {
+    ...original,
+    caloriesPer100g: this.newCalories[id]
+  };
+
+  // 3) Pošalji ceo objekat na backend
+  this.foodService.updateFoodItem(updated).subscribe({
+    next: async (res: FoodItem) => {
+      const t = await this.toastCtrl.create({
+        message: `Ažurirano: ${res.name} (${res.caloriesPer100g} kcal)`,
+        duration: 1500
+      });
+      await t.present();
+      this.loadItems();
+    },
+    error: async (err: any) => {
+      console.error(err);
+      const t = await this.toastCtrl.create({
+        message: 'Greška pri ažuriranju.',
+        duration: 1500
+      });
+      await t.present();
+    }
+  });
+}
 
   // Obriši item
    async deleteItem(id: number) {

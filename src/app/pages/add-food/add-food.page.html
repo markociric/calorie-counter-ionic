@@ -30,14 +30,15 @@
 
       <!-- Unos nove vrednosti kalorija -->
       <ion-input
+      
         type="number"
         [(ngModel)]="newCalories[item.id!]"
         name="cal-{{item.id}}"
-        style="width: 80px; text-align: center;"
+        style="width: 60px; text-align: center;"
       ></ion-input>
 
       <!-- Dugmad za update i delete -->
-      <ion-button size="small" (click)="updateCalories(item.id!)">
+      <ion-button style="margin-left: 25px;" (click)="updateCalories(item.id!)">
         Ažuriraj
       </ion-button>
       <ion-button size="small" color="danger" (click)="deleteItem(item.id!)">

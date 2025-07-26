@@ -18,8 +18,12 @@ export class FoodService {
     readFoodItems(): Observable<FoodItem[]> {
         return this.http.get<FoodItem[]>(this.baseUrl);
     }
-    updateFoodItem(id: number, caloriesPer100g: number): Observable<FoodItem> {
-        return this.http.put<FoodItem>(`${this.baseUrl}/${id}`, { caloriesPer100g });
+    updateFoodItem(item: FoodItem): Observable<FoodItem> {
+        // Spring očekuje PUT /food/food-items/{id} s telom cele entitete
+        return this.http.put<FoodItem>(
+            `${this.baseUrl}/${item.id}`,
+            item
+        );
     }
 
     /** Briše dati item */
