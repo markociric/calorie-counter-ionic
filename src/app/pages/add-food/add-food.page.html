@@ -1,13 +1,48 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>add-food</ion-title>
+    <ion-title>Dodaj Namirnicu</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">add-food</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <!-- Forma za dodavanje -->
+  <form [formGroup]="foodForm" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-label position="stacked">Naziv</ion-label>
+      <ion-input formControlName="name" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Kalorije (na 100 g)</ion-label>
+      <ion-input type="number" formControlName="caloriesPer100g" required></ion-input>
+    </ion-item>
+    <ion-button expand="block" type="submit" [disabled]="foodForm.invalid">
+      Sačuvaj
+    </ion-button>
+  </form>
+
+  <ion-list *ngIf="foodItems.length > 0">
+    <!-- Prikaz svih itema -->
+    <ion-item *ngFor="let item of foodItems">
+      <ion-label>
+        <h2>{{ item.name }}</h2>
+        <p>Trenutno: {{ item.caloriesPer100g }} kcal</p>
+      </ion-label>
+
+      <!-- Unos nove vrednosti kalorija -->
+      <ion-input
+        type="number"
+        [(ngModel)]="newCalories[item.id!]"
+        name="cal-{{item.id}}"
+        style="width: 80px; text-align: center;"
+      ></ion-input>
+
+      <!-- Dugmad za update i delete -->
+      <ion-button size="small" (click)="updateCalories(item.id!)">
+        Ažuriraj
+      </ion-button>
+      <ion-button size="small" color="danger" (click)="deleteItem(item.id!)">
+        Obriši
+      </ion-button>
+    </ion-item>
+  </ion-list>
 </ion-content>

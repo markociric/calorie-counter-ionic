@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient , HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
@@ -12,18 +13,31 @@ export interface LoginResponse {
 export class AuthService {
   private apiUrl = 'http://localhost:8080/auth';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-login(data: { username: string; password: string }): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(
-      `${this.apiUrl}/login`,
-      data
-    );
+  login(data: { username: string; password: string }): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, data).pipe(
+    tap(res => {
+      localStorage.setItem('accessToken', res.accessToken);
+      localStorage.setItem('refreshToken', res.refreshToken);
+    })
+  );
   }
 
   register(data: { username: string; password: string }) {
     return this.http.post(`${this.apiUrl}/register`, data, {
-  responseType: 'text' as 'json',
-});
+      responseType: 'text' as 'json',
+    });
+  }
+   logout(): void {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+  }
+
+  /**
+   * Jednostavan getter da proveriš da li si ulogovan
+   */
+  get isLoggedIn(): boolean {
+    return !!localStorage.getItem('accessToken');
   }
 }

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { AddFoodPageRoutingModule } from './add-food-routing.module';
@@ -13,7 +13,8 @@ import { AddFoodPage } from './add-food.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    AddFoodPageRoutingModule
+    AddFoodPageRoutingModule,
+    ReactiveFormsModule,    // dodaj ovo
   ],
   declarations: [AddFoodPage]
 })

@@ -11,28 +11,28 @@ const routes: Routes = [
     path: 'register',
     loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterPageModule)
   },
- {
+  {
     path: 'dashboard',
-    loadChildren: () =>
-      import('./pages/dashboard-tabs/dashboard-tabs.module')
-        .then(m => m.DashboardTabsPageModule),
+    loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardPageModule)
   },
   {
     path: 'history',
     loadChildren: () => import('./pages/history/history.module').then(m => m.HistoryPageModule)
   },
-  { path: 'admin', redirectTo: 'tabs/users', pathMatch: 'full' },
   {
-    path: 'tabs',
-    loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
+    path: 'admin',
+    loadChildren: () => import('./pages/admin/admin.module').then(m => m.AdminPageModule)
   },
-
-  { path: 'add-food', redirectTo: 'tabs/add-food', pathMatch: 'full' },
-  { path: '**', redirectTo: 'login' },
   {
-    path: 'dashboard-tabs',
-    loadChildren: () => import('./pages/dashboard-tabs/dashboard-tabs.module').then( m => m.DashboardTabsPageModule)
-  }
+    path: 'profile',
+    loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule)
+  },
+  {
+    path: 'add-food',
+    loadChildren: () => import('./pages/add-food/add-food.module').then(m => m.AddFoodPageModule)
+  },
+  { path: '**', redirectTo: 'login' },
+
 ];
 @NgModule({
   imports: [
