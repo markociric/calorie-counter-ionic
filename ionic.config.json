@@ -2,6 +2,8 @@
   "name": "CalorieCounter",
   "integrations": {
     "capacitor": {}
+  },"generate": {
+    "page": { "standalone": false }
   },
   "type": "angular"
 }

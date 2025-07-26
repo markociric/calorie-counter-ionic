@@ -1,0 +1,34 @@
+<ion-content class="register-content">
+  <div class="register-container">
+    <h2>Register</h2>
+    <form (ngSubmit)="onSubmit()">
+      <ion-item class="input-item">
+        <ion-input
+          type="text"
+          placeholder="Enter username"
+          [(ngModel)]="username"
+          name="username"
+          required
+        ></ion-input>
+      </ion-item>
+
+      <ion-item class="input-item">
+        <ion-input
+          type="password"
+          placeholder="Enter password"
+          [(ngModel)]="password"
+          name="password"
+          required
+        ></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" type="submit" class="register-btn">
+        Register
+      </ion-button>
+    </form>
+
+    <p class="login-link">
+      Already have an account? <a routerLink="/login">Login</a>
+    </p>
+  </div>
+</ion-content>

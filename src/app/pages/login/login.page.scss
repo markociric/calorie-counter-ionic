@@ -1,0 +1,86 @@
+ion-content.login-content {
+  --background: linear-gradient(135deg, #eae866, #46c843);
+  position: relative;
+}
+
+.login-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 40px 28px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+  width: 90%;
+  max-width: 320px;
+}
+
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+ion-item.input-item {
+  --background: transparent;
+  --inner-padding-end: 0;
+  --inner-padding-start: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+  --highlight-color-focused: #46c843;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+ion-input {
+  padding: 12px;
+  font-size: 16px;
+  width: 100%;
+  color: #333;
+}
+
+ion-input::part(native) {
+  color: #333;
+}
+
+.toggle-password {
+  font-size: 14px;
+  color: #667eea;
+  text-align: left;
+  margin: 8px 0 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+ion-button.login-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  --background: #46c843;
+  --color: white;
+  font-weight: 600;
+}
+
+ion-button.login-btn:hover {
+  --background: #eae866;
+  --color: #333;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  color: #666;
+}
+
+.register-link a {
+  color: #46c843;
+  text-decoration: none;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,39 @@
+<ion-content class="login-content">
+  <div class="login-container">
+    <h2>Login</h2>
+    <form (ngSubmit)="login()">
+      <ion-item class="input-item">
+        <ion-input
+          type="text"
+          placeholder="Username"
+          [(ngModel)]="username"
+          name="username"
+          required
+        ></ion-input>
+      </ion-item>
+
+      <ion-item class="input-item">
+        <ion-input
+          [type]="passwordVisible ? 'text' : 'password'"
+          placeholder="Password"
+          [(ngModel)]="password"
+          name="password"
+          required
+        ></ion-input>
+      </ion-item>
+
+      <div class="toggle-password" (click)="togglePassword()">
+        {{ passwordVisible ? 'Hide Password' : 'Show Password' }}
+      </div>
+
+      <ion-button expand="block" type="submit" class="login-btn" [disabled]="!username || !password">
+        Login
+      </ion-button>
+    </form>
+
+    <div class="register-link">
+      Don't have an account?
+      <a routerLink="/register">Register</a>
+    </div>
+  </div>
+</ion-content>
