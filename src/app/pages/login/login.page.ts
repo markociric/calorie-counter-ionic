@@ -42,9 +42,9 @@ username = '';
 
           // Preusmeri na /admin ili /dashboard
           if (roles.includes('ROLE_ADMIN')) {
-            this.router.navigate(['/admin']);
+            this.router.navigate(['/tabs/admin']);
           } else {
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/dashboard-tabs/dashboard']);
           }
         },
         error: () => {
