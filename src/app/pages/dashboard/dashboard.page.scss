@@ -1,8 +1,74 @@
-/* This style is for demonstration purposes only. */
-/* It's not required for the tabs to function. */
-.example-content {
+/* Glavni container sa tirkiznim gradientom */
+.ion-padding {
+  background: linear-gradient(135deg, #4ce0b3, #028090); /* tirkizna pozadina */
+  min-height: 100vh;
+  padding: 16px;
+  color: #ffffff;
+}
+
+/* Centriranje kod učitavanja */
+.loading-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  height: 60vh;
+  color: #ffffff;
+}
+
+/* Unos kalorija */
+ion-card {
+  border-radius: 16px;
+  background: #377771;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+}
+
+ion-card-title {
+  font-size: 1.2rem;
+  color: #ffffff;
+  text-align: center;
+}
+
+/* Tekst sa kalorijama */
+ion-card-content h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 12px;
+  color: #ffffff;
+}
+
+/* Lista unosa hrane */
+ion-list-header {
+  font-weight: bold;
+  margin-top: 16px;
+  font-size: 1.1rem;
+  color: #ffffff;
+}
+
+ion-item {
+  --background: #377771;
+  margin-bottom: 6px;
+  border-radius: 12px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+  color: #ffffff;
+}
+
+ion-label h3 {
+  font-size: 1rem;
+  margin-bottom: 4px;
+  color: #ffffff;
+}
+
+ion-label p {
+  font-size: 0.9rem;
+  color: #f0f0f0;
+}
+
+/* Poruka kada nema unosa */
+.ion-text-center {
+  font-style: italic;
+  margin-top: 16px;
+  color: #ffffff;
 }

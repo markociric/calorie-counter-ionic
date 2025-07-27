@@ -39,3 +39,27 @@
   pointer-events: auto !important;
   user-select: auto !important;
 }
+body {
+  background: linear-gradient(135deg, #4ce0b3, #028090);
+  min-height: 100vh;
+  color: #ffffff;
+}
+/* Neka ion-content ne prekriva pozadinu */
+ion-content {
+  --background: transparent !important;
+  color: #ffffff;
+}
+ion-tab-bar {
+  --background: #262626 !important;
+  --color: #ffffff; /* boja ikonica i teksta */
+  --color-selected: #4ce0b3; /* boja za aktivan tab */
+}
+ion-toolbar {
+  --background: #262626 !important;
+  --color: #ffffff !important; /* boja teksta i ikonica u toolbaru */
+}
+ion-button {
+  --background: #028090 !important;
+  --color: #ffffff !important; /* boja teksta/ikonica na dugmetu */
+  border-radius: 12px; /* ili po želji */
+}
