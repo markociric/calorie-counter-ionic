@@ -40,4 +40,26 @@ export class AuthService {
   get isLoggedIn(): boolean {
     return !!localStorage.getItem('accessToken');
   }
+
+  getUserId(): number | null {
+    const token = localStorage.getItem('accessToken');
+    if (!token) return null;
+
+    try {
+      const payload = token.split('.')[1];
+      const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      const obj = JSON.parse(json);
+      // ako backend koristi claim "userId":
+      if (obj.userId) {
+        return Number(obj.userId);
+      }
+      // ili ako ti je ID u "sub":
+      if (obj.sub && !isNaN(+obj.sub)) {
+        return Number(obj.sub);
+      }
+    } catch (e) {
+      console.error('Neuspešno parsiranje userId iz tokena', e);
+    }
+    return null;
+  }
 }

@@ -1,10 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Dashboard</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Listen now</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content>
-        <div class="example-content">Listen now content</div>
-      </ion-content>
-   
+<ion-content class="ion-padding">
+  <ng-container *ngIf="dailyTarget !== null; else loadingPrompt">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Dnevni unos</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <h2>{{ currentCalories }} / {{ dailyTarget }} kcal</h2>
+        <ion-button expand="block" fill="outline" (click)="changeDailyTarget()">
+          Promeni cilj
+        </ion-button>
+
+      </ion-card-content>
+    </ion-card>
+    <ion-button expand="block" color="secondary" (click)="addDailyEntry()">
+      Dodaj unos hrane
+    </ion-button>
+    <!-- Lista unosa hrane za danas -->
+    <ion-list *ngIf="todayEntry && todayEntry.foodEntries.length > 0; else noEntries">
+      <ion-list-header>Unosi danas</ion-list-header>
+      <ion-item *ngFor="let fe of todayEntry!.foodEntries">
+        <ion-label>
+          <h3>{{ fe.foodItem.name }}</h3>
+          <p>
+            {{ fe.grams }} g →
+            {{ (fe.foodItem.caloriesPer100g * fe.grams / 100) | number:'1.0-0' }} kcal
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+    <ng-template #noEntries>
+      <p class="ion-text-center">Još nema unosa za danas.</p>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #loadingPrompt>
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Unesite dnevni cilj kalorija...</p>
+    </div>
+  </ng-template>
+</ion-content>

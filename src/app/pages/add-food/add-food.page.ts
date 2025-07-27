@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FoodService } from 'src/app/services/food.service';
 import { FoodItem } from 'src/app/models/food-item.model';
 import { ToastController, NavController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 @Component({
   selector: 'app-add-food',
   templateUrl: './add-food.page.html',
@@ -19,6 +20,7 @@ export class AddFoodPage implements OnInit {
     private fb: FormBuilder,
     private foodService: FoodService,
     private toastCtrl: ToastController,
+    private alertCtrl: AlertController,
     private navCtrl: NavController
   ) { }
 
@@ -101,19 +103,23 @@ export class AddFoodPage implements OnInit {
 
   // Obriši item
    async deleteItem(id: number) {
-    this.foodService.deleteFoodItem(id).subscribe({
-      next: async () => {
-        const t = await this.toastCtrl.create({ message: 'Obrisano.', duration: 1500 });
-        await t.present();
-        this.loadItems();
+  const alert = await this.alertCtrl.create({
+    header: 'Potvrda',
+    message: 'Da li ste sigurni da želite da obrišete ovu namirnicu?',
+    buttons: [
+      {
+        text: 'Otkaži',
+        role: 'cancel'
       },
-      error: async () => {
-        const t = await this.toastCtrl.create({
-          message: 'Greška pri brisanju.',
-          duration: 1500,
-        });
-        await t.present();
-      },
-    });
-  }
+      {
+        text: 'Obriši',
+        role: 'destructive',
+        handler: () => {
+          this.deleteItem(id);
+        }
+      }
+    ]
+  });
+  await alert.present();
+}
 }

@@ -1,19 +1,19 @@
-// src/app/pages/profile/profile.page.ts
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { jwtDecode } from 'jwt-decode';
+import { AuthService } from 'src/app/services/auth.service';
+import { AlertController } from '@ionic/angular';
 
 interface JwtPayload {
-  sub?: string;             // Subject, obično username
-  authorities?: string[];   // Lista rola (ali tu bude samo jedna)
+  sub: string;
+  role?: string;
+  authorities?: string[];
 }
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
-  standalone: false,
+  standalone:false,
 })
 export class ProfilePage implements OnInit {
   username = '';
@@ -21,30 +21,56 @@ export class ProfilePage implements OnInit {
 
   constructor(
     private auth: AuthService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private alertCtrl: AlertController
+  ) {}
 
   ngOnInit() {
-    console.log('🟢 ProfilePage učitan');
     const token = localStorage.getItem('accessToken');
-    if (token) {
-      try {
-        const decoded = jwtDecode<JwtPayload>(token);
-        this.username = decoded.sub ?? '';
-        // uzimamo samo prvu ili jedinu rolu
-        this.role = (decoded.authorities && decoded.authorities[0]) ?? '';
-      } catch (e) {
-        console.error('Neuspešno dekodiranje tokena', e);
+    if (!token) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.decodeToken(token);
+  }
+
+  private decodeToken(token: string) {
+    try {
+      const payloadBase64 = token.split('.')[1];
+      const json = atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/'));
+      const payload: JwtPayload = JSON.parse(json);
+
+      this.username = payload.sub;
+      if (payload.role) {
+        this.role = payload.role;
+      } else if (payload.authorities?.length) {
+        this.role = payload.authorities[0];
       }
+    } catch (e) {
+      console.error('Neuspešno dekodiranje tokena', e);
     }
   }
-  onContentClick() {
-    console.log('🔵 ion-content je kliknut');
-  }
-  private afterLogout() {
-    // Očisti sve lokalne podatke
-    localStorage.clear();
-    // Preusmeri na login
-    this.router.navigate(['/login']);
+
+  async logout() {
+    const alert = await this.alertCtrl.create({
+      header: 'Potvrda',
+      message: 'Da li ste sigurni da želite da se odjavite?',
+      buttons: [
+        {
+          text: 'Otkaži',
+          role: 'cancel'
+        },
+        {
+          text: 'Odjavi se',
+          role: 'confirm',
+          handler: () => {
+            this.auth.logout();
+            this.router.navigate(['/login']);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 }
