@@ -34,4 +34,8 @@ export class EntryService {
     const today = new Date().toISOString().split('T')[0]; // yyyy-MM-dd
     return this.http.get<DailyEntry>(`${this.url}/daily-entries?date=${today}`);
   }
+
+  getAllEntries(): Observable<DailyEntry[]> {
+  return this.http.get<DailyEntry[]>(`${this.url}/daily-entries`);
+}
 }

@@ -1,13 +1,25 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>history</ion-title>
+    <ion-title>Istorija unosa</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">history</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-card *ngFor="let day of history">
+    <ion-item button (click)="toggleExpand(day.date)">
+      <ion-label>
+        <h2>{{ day.date }}</h2>
+        <p>Ukupno: {{ day.totalCalories }} kcal</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-list *ngIf="isExpanded(day.date)">
+      <ion-item *ngFor="let entry of day.entries">
+        <ion-label>
+          <h3>{{ entry.foodName }}</h3>
+          <p>{{ entry.grams }}g – {{ getCalories(entry.foodName, entry.grams) }} kcal</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-card>
 </ion-content>

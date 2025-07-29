@@ -1,0 +1,58 @@
+/* Kartice dana (glavna struktura) */
+ion-card {
+  margin-bottom: 16px;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  background: #377771; /* tvoje tamno-zelena-plava */
+  color: #ffffff;
+  transition: transform 0.2s ease;
+}
+
+ion-card:hover {
+  transform: scale(1.01);
+}
+
+/* Toolbar i naslov */
+ion-toolbar {
+  --background: #028090; /* glava aplikacije */
+  --color: #ffffff;
+}
+
+ion-title {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Glavni item koji prikazuje dan */
+ion-item {
+  --background: transparent;
+  --color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Lista unosa kad se klikne na dan */
+ion-list {
+  background: #262626; /* tamna, neutralna pozadina */
+  border-radius: 12px;
+  margin: 8px 12px;
+  padding: 8px;
+}
+
+ion-label h2,
+ion-label h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+ion-label p {
+  font-size: 0.85rem;
+  color: #cccccc;
+}
+
+/* Pozadina contenta (blagi gradient) */
+ion-content {
+  background: linear-gradient(135deg, #4ce0b3, #028090);
+  --padding-top: 12px;
+}
