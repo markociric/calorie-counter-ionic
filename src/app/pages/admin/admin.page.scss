@@ -1,14 +1,5 @@
-/* src/app/pages/admin/admin.page.scss */
-
-.example-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
 ion-content.admin-content {
-  --background: linear-gradient(135deg, #eae866, #46c843);
+  --background: linear-gradient(135deg, #4ce0b3, #028090); // lepša pozadina iz tvoje palete
   position: relative;
 }
 
@@ -17,49 +8,54 @@ ion-content.admin-content {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #fff;
+  background: #377771; // tamna pozadina za kontejner
   padding: 32px 24px;
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
   width: 90%;
-  max-width: 360px;
+  max-width: 420px;
   text-align: center;
+  color: #ffffff;
 }
 
 .admin-container h2 {
   margin-bottom: 16px;
-  color: #222;
   font-weight: 600;
+  color: #ffffff;
 }
 
-
-
-/* Tabela zauzima punu širinu unutar table-wrapper */
+/* Tabela stil */
 .user-table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 16px;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 0.95rem;
 }
 
-/* Zaglavlje je sticky i fiksirano na vrhu scroll kontejnera */
+/* Zaglavlje tabele */
 .user-table thead th {
-  position: sticky;
-  top: 0;
-  background: #28c840;
-  color: #fff;
-  font-weight: 500;
-  padding: 8px;
+  background: #028090;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 10px;
   text-align: left;
-  z-index: 1;
 }
 
-/* Parni redovi imaju svetliju sivu pozadinu */
+/* Redovi tabele */
 .user-table tbody tr:nth-child(even) {
-  background: #f6f6f6;
+  background: #f0fdfb; // svetla varijanta
 }
 
-/* Ćelije imaju tamnu boju teksta */
+.user-table tbody tr:nth-child(odd) {
+  background: #ffffff;
+}
+
+/* Ćelije */
 .user-table td {
-  padding: 8px;
-  border-bottom: 1px solid #eee;
-  color: #333;
+  padding: 10px;
+  color: #262626;
+  border-bottom: 1px solid #ddd;
 }
