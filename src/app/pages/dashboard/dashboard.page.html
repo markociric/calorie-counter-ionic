@@ -6,39 +6,59 @@
 
 <ion-content class="ion-padding">
   <ng-container *ngIf="dailyTarget !== null; else loadingPrompt">
+    <!-- Kartica: Dnevni unos -->
     <ion-card>
       <ion-card-header>
         <ion-card-title>Dnevni unos</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <h2>{{ currentCalories }} / {{ dailyTarget }} kcal</h2>
+
+        <!-- Progress bar -->
+        <ion-progress-bar
+          [value]="currentCalories / dailyTarget"
+          color="success"
+        ></ion-progress-bar>
+
         <ion-button expand="block" fill="outline" (click)="changeDailyTarget()">
           Promeni cilj
         </ion-button>
-
       </ion-card-content>
     </ion-card>
+
+    <!-- Dugme za dodavanje -->
     <ion-button expand="block" color="secondary" (click)="addDailyEntry()">
       Dodaj unos hrane
     </ion-button>
-    <!-- Lista unosa hrane za danas -->
-    <ion-list *ngIf="todayEntry && todayEntry.foodEntries.length > 0; else noEntries">
-      <ion-list-header>Unosi danas</ion-list-header>
-      <ion-item *ngFor="let fe of todayEntry!.foodEntries">
-        <ion-label>
-          <h3>{{ fe.foodItem.name }}</h3>
-          <p>
-            {{ fe.grams }} g →
-            {{ (fe.foodItem.caloriesPer100g * fe.grams / 100) | number:'1.0-0' }} kcal
-          </p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
+
+    <!-- Tabela unosa -->
+    <ion-card *ngIf="todayEntry && todayEntry.entries.length > 0">
+      <ion-card-header>
+        <ion-card-title>Unosi za danas</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col><strong>Namirnica</strong></ion-col>
+            <ion-col><strong>Grami</strong></ion-col>
+            <ion-col><strong>kcal</strong></ion-col>
+          </ion-row>
+          <ion-row *ngFor="let fe of todayEntry.entries">
+            <ion-col>{{ fe.foodName }}</ion-col>
+            <ion-col>{{ fe.grams }}</ion-col>
+            <ion-col>{{ getCalories(fe.foodName, fe.grams) }}</ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Ako nema unosa -->
     <ng-template #noEntries>
       <p class="ion-text-center">Još nema unosa za danas.</p>
     </ng-template>
   </ng-container>
 
+  <!-- Spinner dok se ne unese dnevni cilj -->
   <ng-template #loadingPrompt>
     <div class="loading-container">
       <ion-spinner name="crescent"></ion-spinner>

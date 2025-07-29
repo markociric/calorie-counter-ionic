@@ -148,13 +148,26 @@ export class DashboardPage {
 
   /** Poziva backend da zabeleži unos i zatim učitava novi dnevni unos */
   private logEntry(foodId: number, grams: number) {
-    this.entryService.logFoodEntry(foodId, grams).subscribe({
-      next: () => {
-        this.loadTodayEntry();
-      },
-      error: err => {
-        console.error('Greška pri logovanju unosa hrane', err);
-      }
-    });
+  const selectedItem = this.foodItems.find(item => item.id === foodId);
+  if (!selectedItem) {
+    console.error('Nepoznata namirnica');
+    return;
   }
+
+  this.entryService.logFoodEntry(selectedItem.name, grams).subscribe({
+    next: () => {
+      this.loadTodayEntry();
+    },
+    error: err => {
+      console.error('Greška pri logovanju unosa hrane', err);
+    }
+  });
+}
+
+getCalories(foodName: string, grams: number): number {
+  const item = this.foodItems.find(i => i.name === foodName);
+  if (!item) return 0;
+  return Math.round((item.caloriesPer100g * grams) / 100);
+}
+
 }
