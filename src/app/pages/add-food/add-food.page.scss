@@ -1,0 +1,94 @@
+ion-toolbar {
+  --background: #028090; /* tamna teal */
+  --color: #ffffff;
+}
+
+ion-title {
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Pozadina contenta */
+ion-content {
+  background: linear-gradient(135deg, #4ce0b3, #028090);
+  --padding-top: 16px;
+}
+
+/* Stil za formu */
+form {
+  ion-item {
+    --background: #ffffff;
+    --border-radius: 10px;
+    margin-bottom: 12px;
+  }
+
+  ion-label {
+    color: #262626;
+    font-weight: 500;
+  }
+
+  ion-input {
+    --color: #262626;
+  }
+
+  ion-button {
+    margin-top: 12px;
+    --background: #028090;
+    --color: #ffffff;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+
+  ion-button[disabled] {
+    opacity: 0.5;
+  }
+}
+
+/* Lista postojećih namirnica */
+ion-list {
+  background: #377771;
+  border-radius: 12px;
+  margin-top: 20px;
+  padding: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+ion-item {
+  --background: transparent;
+  --color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  align-items: center;
+}
+
+ion-label h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+ion-label p {
+  font-size: 0.9rem;
+  color: #e0e0e0;
+}
+
+ion-input[type="number"] {
+  background: #ffffff;
+  color: #262626;
+  border-radius: 8px;
+  padding: 4px 8px;
+  max-width: 80px;
+  margin-left: 8px;
+}
+
+/* Dugmad za ažuriranje i brisanje */
+ion-button[color="danger"] {
+  --background: #e74c3c;
+  margin-left: 12px;
+}
+
+ion-button:not([color="danger"]) {
+  --background: #e8d33f;
+  color: #262626;
+  font-weight: 500;
+}
