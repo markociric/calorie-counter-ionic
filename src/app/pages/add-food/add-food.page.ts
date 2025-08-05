@@ -24,7 +24,7 @@ export class AddFoodPage implements OnInit {
     private navCtrl: NavController
   ) { }
 
-   ngOnInit() {
+  ngOnInit() {
     this.foodForm = this.fb.group({
       name: ['', Validators.required],
       caloriesPer100g: [null, [Validators.required, Validators.min(0)]],
@@ -57,7 +57,7 @@ export class AddFoodPage implements OnInit {
       },
     });
   }
-// Učitaj sve iteme
+  // Učitaj sve iteme
   loadItems() {
     this.foodService.readFoodItems().subscribe({
       next: (items: FoodItem[]) => {
@@ -70,56 +70,71 @@ export class AddFoodPage implements OnInit {
 
   // Ažuriraj kalorije
   async updateCalories(id: number) {
-  // 1) Nađi originalni item iz liste
-  const original = this.foodItems.find(i => i.id === id);
-  if (!original) { return; }
+    // 1) Nađi originalni item iz liste
+    const original = this.foodItems.find(i => i.id === id);
+    if (!original) { return; }
 
-  // 2) Kloniraj i promeni kalorije
-  const updated: FoodItem = {
-    ...original,
-    caloriesPer100g: this.newCalories[id]
-  };
+    // 2) Kloniraj i promeni kalorije
+    const updated: FoodItem = {
+      ...original,
+      caloriesPer100g: this.newCalories[id]
+    };
 
-  // 3) Pošalji ceo objekat na backend
-  this.foodService.updateFoodItem(updated).subscribe({
-    next: async (res: FoodItem) => {
-      const t = await this.toastCtrl.create({
-        message: `Ažurirano: ${res.name} (${res.caloriesPer100g} kcal)`,
-        duration: 1500
-      });
-      await t.present();
-      this.loadItems();
-    },
-    error: async (err: any) => {
-      console.error(err);
-      const t = await this.toastCtrl.create({
-        message: 'Greška pri ažuriranju.',
-        duration: 1500
-      });
-      await t.present();
-    }
-  });
-}
+    // 3) Pošalji ceo objekat na backend
+    this.foodService.updateFoodItem(updated).subscribe({
+      next: async (res: FoodItem) => {
+        const t = await this.toastCtrl.create({
+          message: `Ažurirano: ${res.name} (${res.caloriesPer100g} kcal)`,
+          duration: 1500
+        });
+        await t.present();
+        this.loadItems();
+      },
+      error: async (err: any) => {
+        console.error(err);
+        const t = await this.toastCtrl.create({
+          message: 'Greška pri ažuriranju.',
+          duration: 1500
+        });
+        await t.present();
+      }
+    });
+  }
 
   // Obriši item
-   async deleteItem(id: number) {
-  const alert = await this.alertCtrl.create({
-    header: 'Potvrda',
-    message: 'Da li ste sigurni da želite da obrišete ovu namirnicu?',
-    buttons: [
-      {
-        text: 'Otkaži',
-        role: 'cancel'
-      },
-      {
-        text: 'Obriši',
-        role: 'destructive',
-        handler: () => {
-          this.deleteItem(id);
+  async deleteItem(id: number) {
+    const alert = await this.alertCtrl.create({
+      header: 'Potvrda',
+      message: 'Da li ste sigurni da želite da obrišete ovu namirnicu?',
+      buttons: [
+        {
+          text: 'Otkaži',
+          role: 'cancel'
+        },
+        {
+          text: 'Obriši',
+          role: 'destructive',
+          handler: () => {
+            this.foodService.deleteFoodItem(id).subscribe({
+              next: () => {
+                //osveži prikaz
+                this.toastCtrl
+                .create({
+                  message: 'Namirnica je uspešno obrisana',
+                  duration: 1500,
+                  position: 'bottom'
+                })
+                .then(toast => toast.present());
+                this.loadItems();
+              },
+              error: (err) => {
+                console.error('Greška pri brisanju:', err);
+              }
+            });
+          }
         }
-      }
-    ]
-  });
-  await alert.present();
-}
+      ]
+    });
+    await alert.present();
+  }
 }
