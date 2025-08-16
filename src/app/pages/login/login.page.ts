@@ -10,14 +10,20 @@ interface JwtPayload {
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  standalone:false,
+  standalone: false,
 })
 export class LoginPage {
-username = '';
+  username = '';
   password = '';
   passwordVisible = false;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  // spinner flag za iOS <ion-spinner>
+  isSubmitting = false;
+
+  constructor(
+    private auth: AuthService,
+    private router: Router
+  ) {}
 
   login() {
     if (!this.username.trim() || !this.password.trim()) {
@@ -25,32 +31,36 @@ username = '';
       return;
     }
 
-    this.authService
-      .login({ username: this.username, password: this.password })
-      .subscribe({
-        next: (res: LoginResponse) => {
-          // Sačuvaj tokene
-          localStorage.setItem('accessToken', res.accessToken);
-          localStorage.setItem('refreshToken', res.refreshToken);
-          if (res.refreshTokenExpiry) {
-            localStorage.setItem('refreshTokenExpiry', res.refreshTokenExpiry);
-          }
+    this.isSubmitting = true;
 
-          // Dekodiraj JWT i izvuci role
+    // AuthService.login vraća Observable<LoginResponse>
+    // ali da izbegnemo RxJS overload probleme -> koristimo subscribe(success, error)
+    this.auth.login({ username: this.username, password: this.password }).subscribe(
+      // SUCCESS
+      (res: any) => {
+        try {
+          // token se već snima u AuthService preko tap(), ali ovde ga čitamo za role
           const decoded = jwtDecode<JwtPayload>(res.accessToken);
-          const roles = decoded.authorities || [];
+          const roles = decoded?.authorities || [];
 
-          // Preusmeri na /admin ili /dashboard
           if (roles.includes('ROLE_ADMIN')) {
             this.router.navigate(['/tabs/admin']);
           } else {
-            this.router.navigate(['/dashboard-tabs/dashboard']);
+            this.router.navigate(['/dashboard-tabs/dashboard']);// standardni korisnik
           }
-        },
-        error: () => {
-          alert('Login neuspešan');
-        },
-      });
+        } catch (e) {
+          // fallback ako jwtDecode padne
+          this.router.navigate(['/dashboard-tabs/dashboard']);
+        } finally {
+          this.isSubmitting = false;
+        }
+      },
+      // ERROR
+      () => {
+        this.isSubmitting = false;
+        alert('Login neuspešan');
+      }
+    );
   }
 
   togglePassword() {

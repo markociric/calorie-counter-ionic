@@ -5,63 +5,71 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ng-container *ngIf="dailyTarget !== null; else loadingPrompt">
-    <!-- Kartica: Dnevni unos -->
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Dnevni unos</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <h2>{{ currentCalories }} / {{ dailyTarget }} kcal</h2>
+  <!-- Glavni spinner dok traje učitavanje -->
+  <div class="center-spinner" *ngIf="isLoading">
+    <ion-spinner mode="ios" name="crescent"></ion-spinner>
+  </div>
 
-        <!-- Progress bar -->
-        <ion-progress-bar
-          [value]="currentCalories / dailyTarget"
-          color="success"
-        ></ion-progress-bar>
+  <!-- Ostatak sadržaja prikazujemo samo ako nije loading -->
+  <ng-container *ngIf="!isLoading">
+    <ng-container *ngIf="dailyTarget !== null; else loadingPrompt">
+      <!-- Kartica: Dnevni unos -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Dnevni unos</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <h2>{{ currentCalories }} / {{ dailyTarget }} kcal</h2>
 
-        <ion-button expand="block" fill="outline" (click)="changeDailyTarget()">
-          Promeni cilj
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
+          <!-- Progress bar -->
+          <ion-progress-bar
+            [value]="currentCalories / dailyTarget"
+            color="success"
+          ></ion-progress-bar>
 
-    <!-- Dugme za dodavanje -->
-    <ion-button expand="block" color="secondary" (click)="addDailyEntry()">
-      Dodaj unos hrane
-    </ion-button>
+          <ion-button expand="block" fill="outline" (click)="changeDailyTarget()">
+            Promeni cilj
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
 
-    <!-- Tabela unosa -->
-    <ion-card *ngIf="todayEntry && todayEntry.entries.length > 0">
-      <ion-card-header>
-        <ion-card-title>Unosi za danas</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-grid>
-          <ion-row>
-            <ion-col><strong>Namirnica</strong></ion-col>
-            <ion-col><strong>Grami</strong></ion-col>
-            <ion-col><strong>kcal</strong></ion-col>
-          </ion-row>
-          <ion-row *ngFor="let fe of todayEntry.entries">
-            <ion-col>{{ fe.foodName }}</ion-col>
-            <ion-col>{{ fe.grams }}</ion-col>
-            <ion-col>{{ getCalories(fe.foodName, fe.grams) }}</ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card-content>
-    </ion-card>
+      <!-- Dugme za dodavanje -->
+      <ion-button expand="block" color="secondary" (click)="addDailyEntry()">
+        Dodaj unos hrane
+      </ion-button>
 
-    <!-- Ako nema unosa -->
-    <ng-template #noEntries>
-      <p class="ion-text-center">Još nema unosa za danas.</p>
-    </ng-template>
+      <!-- Tabela unosa -->
+      <ion-card *ngIf="todayEntry && todayEntry.entries.length > 0; else noEntries">
+        <ion-card-header>
+          <ion-card-title>Unosi za danas</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col><strong>Namirnica</strong></ion-col>
+              <ion-col><strong>Grami</strong></ion-col>
+              <ion-col><strong>kcal</strong></ion-col>
+            </ion-row>
+            <ion-row *ngFor="let fe of todayEntry.entries">
+              <ion-col>{{ fe.foodName }}</ion-col>
+              <ion-col>{{ fe.grams }}</ion-col>
+              <ion-col>{{ getCalories(fe.foodName, fe.grams) }}</ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
   </ng-container>
 
-  <!-- Spinner dok se ne unese dnevni cilj -->
+  <!-- Ako nema unosa -->
+  <ng-template #noEntries>
+    <p class="ion-text-center">Još nema unosa za danas.</p>
+  </ng-template>
+
+  <!-- Ako nema dnevnog cilja -->
   <ng-template #loadingPrompt>
     <div class="loading-container">
-      <ion-spinner name="crescent"></ion-spinner>
+      <ion-spinner mode="ios" name="crescent"></ion-spinner>
       <p>Unesite dnevni cilj kalorija...</p>
     </div>
   </ng-template>

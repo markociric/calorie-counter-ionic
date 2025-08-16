@@ -63,3 +63,19 @@ ion-button {
   --color: #ffffff !important; /* boja teksta/ikonica na dugmetu */
   border-radius: 12px; /* ili po želji */
 }
+.center-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  width: 100%;
+}
+.fullscreen-spinner {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.05);
+  z-index: 9999;
+}

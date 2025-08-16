@@ -3,32 +3,30 @@
     <h2>Login</h2>
     <form (ngSubmit)="login()">
       <ion-item class="input-item">
-        <ion-input
-          type="text"
-          placeholder="Username"
-          [(ngModel)]="username"
-          name="username"
-          required
-        ></ion-input>
+        <ion-input type="text" placeholder="Username" [(ngModel)]="username" name="username" required></ion-input>
       </ion-item>
 
       <ion-item class="input-item">
-        <ion-input
-          [type]="passwordVisible ? 'text' : 'password'"
-          placeholder="Password"
-          [(ngModel)]="password"
-          name="password"
-          required
-        ></ion-input>
+        <ion-input [type]="passwordVisible ? 'text' : 'password'" placeholder="Password" [(ngModel)]="password"
+          name="password" required></ion-input>
       </ion-item>
 
       <div class="toggle-password" (click)="togglePassword()">
         {{ passwordVisible ? 'Hide Password' : 'Show Password' }}
       </div>
 
-      <ion-button expand="block" type="submit" class="login-btn" [disabled]="!username || !password">
-        Login
+      <ion-button expand="block" type="submit" [disabled]="isSubmitting">
+        <ng-container *ngIf="!isSubmitting; else onlySpinner">
+          Login
+        </ng-container>
+
+        <ng-template #onlySpinner>
+          <!-- bez slota => centriran u sredini dugmeta -->
+          <ion-spinner mode="ios" name="dots"></ion-spinner>
+        </ng-template>
       </ion-button>
+
+
     </form>
 
     <div class="register-link">

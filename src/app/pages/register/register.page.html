@@ -3,27 +3,21 @@
     <h2>Register</h2>
     <form (ngSubmit)="onSubmit()">
       <ion-item class="input-item">
-        <ion-input
-          type="text"
-          placeholder="Enter username"
-          [(ngModel)]="username"
-          name="username"
-          required
-        ></ion-input>
+        <ion-input type="text" placeholder="Enter username" [(ngModel)]="username" name="username" required></ion-input>
       </ion-item>
 
       <ion-item class="input-item">
-        <ion-input
-          type="password"
-          placeholder="Enter password"
-          [(ngModel)]="password"
-          name="password"
-          required
-        ></ion-input>
+        <ion-input type="password" placeholder="Enter password" [(ngModel)]="password" name="password"
+          required></ion-input>
       </ion-item>
 
-      <ion-button expand="block" type="submit" class="register-btn">
-        Register
+      <ion-button expand="block" type="submit" class="register-btn" [disabled]="isSubmitting">
+        <ng-container *ngIf="!isSubmitting; else regSpinner">
+          Register
+        </ng-container>
+        <ng-template #regSpinner>
+          <ion-spinner mode="ios" name="dots"></ion-spinner>
+        </ng-template>
       </ion-button>
     </form>
 

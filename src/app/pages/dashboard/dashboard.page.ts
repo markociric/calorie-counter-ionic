@@ -17,6 +17,7 @@ export class DashboardPage {
   currentCalories = 0;
   foodItems: FoodItem[] = [];
   todayEntry: DailyEntry | null = null;
+  isLoading = false;
 
   constructor(
     private alertCtrl: AlertController,
@@ -24,6 +25,11 @@ export class DashboardPage {
     private entryService: EntryService,
     private auth: AuthService
   ) {}
+
+  ionViewWillEnter() {
+    // Uključimo page-level spinner; gašenje radimo kada oba učitavanja završe u ionViewDidEnter
+    this.isLoading = true;
+  }
 
   ionViewDidEnter() {
     // 1) Učitaj dnevni cilj i trenutno stanje iz localStorage
@@ -39,13 +45,31 @@ export class DashboardPage {
       this.promptDailyTarget();
     }
 
-    // 3) Učitaj namirnice za combobox
-    this.foodService.readFoodItems().subscribe(items => {
-      this.foodItems = items;
+    // 3) Paralelno učitaj namirnice i današnji unos; spinner gasimo tek kad oba završe
+    let pending = 2;
+
+    this.foodService.readFoodItems().subscribe({
+      next: items => {
+        this.foodItems = items;
+        if (--pending === 0) this.isLoading = false;
+      },
+      error: _ => {
+        if (--pending === 0) this.isLoading = false;
+      }
     });
 
-    // 4) Učitaj današnji unos iz baze
-    this.loadTodayEntry();
+    this.entryService.getTodayEntry().subscribe({
+      next: (daily: DailyEntry) => {
+        this.todayEntry = daily;
+        this.currentCalories = daily.totalCalories;
+        localStorage.setItem('currentCalories', this.currentCalories.toString());
+        if (--pending === 0) this.isLoading = false;
+      },
+      error: err => {
+        console.error('Ne mogu da učitam dnevni unos', err);
+        if (--pending === 0) this.isLoading = false;
+      }
+    });
   }
 
   private async promptDailyTarget() {
@@ -79,8 +103,9 @@ export class DashboardPage {
     this.loadTodayEntry();
   }
 
-  /** Učitaj današnji unos sa backend‑a */
+  /** Učitaj današnji unos sa backend-a */
   private loadTodayEntry() {
+    // Pomoćna funkcija koju već koristiš posle nekih radnji
     this.entryService.getTodayEntry().subscribe({
       next: (daily: DailyEntry) => {
         this.todayEntry = daily;
@@ -148,26 +173,25 @@ export class DashboardPage {
 
   /** Poziva backend da zabeleži unos i zatim učitava novi dnevni unos */
   private logEntry(foodId: number, grams: number) {
-  const selectedItem = this.foodItems.find(item => item.id === foodId);
-  if (!selectedItem) {
-    console.error('Nepoznata namirnica');
-    return;
+    const selectedItem = this.foodItems.find(item => item.id === foodId);
+    if (!selectedItem) {
+      console.error('Nepoznata namirnica');
+      return;
+    }
+
+    this.entryService.logFoodEntry(selectedItem.name, grams).subscribe({
+      next: () => {
+        this.loadTodayEntry();
+      },
+      error: err => {
+        console.error('Greška pri logovanju unosa hrane', err);
+      }
+    });
   }
 
-  this.entryService.logFoodEntry(selectedItem.name, grams).subscribe({
-    next: () => {
-      this.loadTodayEntry();
-    },
-    error: err => {
-      console.error('Greška pri logovanju unosa hrane', err);
-    }
-  });
-}
-
-getCalories(foodName: string, grams: number): number {
-  const item = this.foodItems.find(i => i.name === foodName);
-  if (!item) return 0;
-  return Math.round((item.caloriesPer100g * grams) / 100);
-}
-
+  getCalories(foodName: string, grams: number): number {
+    const item = this.foodItems.find(i => i.name === foodName);
+    if (!item) return 0;
+    return Math.round((item.caloriesPer100g * grams) / 100);
+  }
 }

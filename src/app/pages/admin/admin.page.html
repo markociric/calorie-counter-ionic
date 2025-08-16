@@ -9,21 +9,34 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
 <ion-content class="admin-content" [scrollY]="false">
-  <div class="admin-container">
-    <h2>Korisnici u sistemu</h2>
-    <div class="table-wrapper">
-      <table class="user-table">
-        <thead>
-          <tr><th>Korisničko ime</th><th>Rola</th></tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let u of users">
-            <td>{{ u.username }}</td>
-            <td>{{ u.role }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+
+  <!-- Spinner tokom učitavanja korisnika -->
+  <div class="center-spinner" *ngIf="isLoadingUsers">
+    <ion-spinner mode="ios" name="crescent"></ion-spinner>
   </div>
+
+  <!-- Prikaz kad korisnici budu učitani -->
+  <ng-container *ngIf="!isLoadingUsers">
+    <div class="admin-container">
+      <h2>Korisnici u sistemu</h2>
+      <div class="table-wrapper">
+        <table class="user-table">
+          <thead>
+            <tr>
+              <th>Korisničko ime</th>
+              <th>Rola</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let u of users">
+              <td>{{ u.username }}</td>
+              <td>{{ u.role }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
 </ion-content>

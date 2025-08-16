@@ -4,6 +4,7 @@ import { FoodService } from 'src/app/services/food.service';
 import { FoodItem } from 'src/app/models/food-item.model';
 import { ToastController, NavController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
+import { delay } from 'rxjs/operators';
 @Component({
   selector: 'app-add-food',
   templateUrl: './add-food.page.html',
@@ -15,7 +16,8 @@ export class AddFoodPage implements OnInit {
   foodForm!: FormGroup;
   foodItems: FoodItem[] = [];
   newCalories: { [id: number]: number } = {};
-
+  isLoadingList = false;  // spinner za listu
+  isSaving = false;       // spinner za dugme "Sačuvaj"
   constructor(
     private fb: FormBuilder,
     private foodService: FoodService,
@@ -38,7 +40,8 @@ export class AddFoodPage implements OnInit {
     }
 
     const newItem: FoodItem = this.foodForm.value;
-    this.foodService.createFoodItem(newItem).subscribe({
+     this.isSaving = true; // <<< upali spinner u dugmetu
+    this.foodService.createFoodItem(newItem).pipe(delay(1200)).subscribe({
       next: async (created: FoodItem) => {
         const toast = await this.toastCtrl.create({
           message: `Namirnica "${created.name}" je dodata!`,
@@ -55,16 +58,21 @@ export class AddFoodPage implements OnInit {
         });
         await toast.present();
       },
+       complete: () => { this.isSaving = false; } // <<< ugasi spinner
     });
   }
   // Učitaj sve iteme
   loadItems() {
-    this.foodService.readFoodItems().subscribe({
+    this.isLoadingList = true;
+  this.foodService.readFoodItems()
+    .pipe(delay(1500)) // <<< usporenje da vidiš spinner ~1.5s
+    .subscribe({
       next: (items: FoodItem[]) => {
         this.foodItems = items;
         items.forEach((i: FoodItem) => (this.newCalories[i.id!] = i.caloriesPer100g));
       },
       error: err => console.error(err),
+      complete: () => { this.isLoadingList = false; }
     });
   }
 
@@ -119,12 +127,12 @@ export class AddFoodPage implements OnInit {
               next: () => {
                 //osveži prikaz
                 this.toastCtrl
-                .create({
-                  message: 'Namirnica je uspešno obrisana',
-                  duration: 1500,
-                  position: 'bottom'
-                })
-                .then(toast => toast.present());
+                  .create({
+                    message: 'Namirnica je uspešno obrisana',
+                    duration: 1500,
+                    position: 'bottom'
+                  })
+                  .then(toast => toast.present());
                 this.loadItems();
               },
               error: (err) => {

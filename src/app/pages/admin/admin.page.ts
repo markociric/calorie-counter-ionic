@@ -10,17 +10,30 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class AdminPage implements OnInit {
   users: AppUser[] = [];
+    isLoadingUsers = false;
   constructor(private userService: UserService, private auth: AuthService,
     private navCtrl: NavController) {
 
   }
 
-  ngOnInit() {
+   ngOnInit() {
+  this.isLoadingUsers = true;
+
+  // simuliramo kašnjenje od 2 sekunde
+  setTimeout(() => {
     this.userService.getAllUsers().subscribe({
-      next: (list) => (this.users = list),
-      error: (err) => console.error('Greška pri učitavanju korisnika', err),
+      next: (list) => {
+        this.users = list;
+        this.isLoadingUsers = false;
+      },
+      error: (err) => {
+        console.error('Greška pri učitavanju korisnika', err);
+        this.isLoadingUsers = false;
+      },
     });
-  }
+  }, 1000); // 2000ms
+}
+
 logout() {
     // Obriši credentiale iz lokalnog skladišta
     this.auth.logout();             // ili localStorage.clear() u zavisnosti od tvog servisa

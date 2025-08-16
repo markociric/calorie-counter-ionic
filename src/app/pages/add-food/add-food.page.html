@@ -11,17 +11,30 @@
       <ion-label position="stacked">Naziv</ion-label>
       <ion-input formControlName="name" required></ion-input>
     </ion-item>
+
     <ion-item>
-      <ion-label position="stacked">Kalorije (na 100 g)</ion-label>
+      <ion-label position="stacked">Kalorije (na 100 g)</ion-label>
       <ion-input type="number" formControlName="caloriesPer100g" required></ion-input>
     </ion-item>
-    <ion-button expand="block" type="submit" [disabled]="foodForm.invalid">
-      Sačuvaj
+
+    <!-- Dugme Sačuvaj sa iOS spinnerom -->
+    <ion-button expand="block" type="submit" [disabled]="foodForm.invalid || isSaving">
+      <ng-container *ngIf="!isSaving; else savingBtn">
+        Sačuvaj
+      </ng-container>
+      <ng-template #savingBtn>
+        <ion-spinner mode="ios" name="dots"></ion-spinner>
+      </ng-template>
     </ion-button>
   </form>
 
-  <ion-list *ngIf="foodItems.length > 0">
-    <!-- Prikaz svih itema -->
+  <!-- Spinner dok se lista učitava -->
+  <div class="center-spinner" *ngIf="isLoadingList">
+    <ion-spinner mode="ios"></ion-spinner>
+  </div>
+
+  <!-- Lista svih item-a (kad je učitavanje gotovo) -->
+  <ion-list *ngIf="!isLoadingList && foodItems.length > 0">
     <ion-item *ngFor="let item of foodItems">
       <ion-label>
         <h2>{{ item.name }}</h2>
@@ -30,10 +43,9 @@
 
       <!-- Unos nove vrednosti kalorija -->
       <ion-input
-      
         type="number"
         [(ngModel)]="newCalories[item.id!]"
-        name="cal-{{item.id}}"
+        name="cal-{{ item.id }}"
         style="width: 60px; text-align: center;"
       ></ion-input>
 
@@ -46,4 +58,9 @@
       </ion-button>
     </ion-item>
   </ion-list>
+
+  <!-- Poruka kada nema itema -->
+  <p class="ion-text-center" *ngIf="!isLoadingList && foodItems.length === 0">
+    Nema unetih namirnica.
+  </p>
 </ion-content>
