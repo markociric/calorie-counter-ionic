@@ -9,12 +9,12 @@
   <form [formGroup]="foodForm" (ngSubmit)="onSubmit()">
     <ion-item>
       <ion-label position="stacked">Naziv</ion-label>
-      <ion-input formControlName="name" required></ion-input>
+      <ion-input formControlName="name" style="text-align: left;" required></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Kalorije (na 100 g)</ion-label>
-      <ion-input type="number" formControlName="caloriesPer100g" required></ion-input>
+      <ion-input type="number" formControlName="caloriesPer100g" style="text-align: left;" required></ion-input>
     </ion-item>
 
     <!-- Dugme Sačuvaj sa iOS spinnerom -->

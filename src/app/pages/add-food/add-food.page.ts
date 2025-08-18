@@ -57,6 +57,7 @@ export class AddFoodPage implements OnInit {
           duration: 2000,
         });
         await toast.present();
+        this.isSaving = false;
       },
        complete: () => { this.isSaving = false; } // <<< ugasi spinner
     });

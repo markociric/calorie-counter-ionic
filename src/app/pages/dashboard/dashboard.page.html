@@ -19,7 +19,7 @@
           <ion-card-title>Dnevni unos</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <h2>{{ currentCalories }} / {{ dailyTarget }} kcal</h2>
+          <h2>{{ currentCalories | number:'1.2-2' }} / {{ dailyTarget }} kcal</h2>
 
           <!-- Progress bar -->
           <ion-progress-bar

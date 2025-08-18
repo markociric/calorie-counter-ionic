@@ -35,34 +35,41 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
 * {
   pointer-events: auto !important;
   user-select: auto !important;
 }
+
 body {
   background: linear-gradient(135deg, #4ce0b3, #028090);
   min-height: 100vh;
   color: #ffffff;
 }
+
 /* Neka ion-content ne prekriva pozadinu */
 ion-content {
   --background: transparent !important;
   color: #ffffff;
 }
+
 ion-tab-bar {
   --background: #262626 !important;
   --color: #ffffff; /* boja ikonica i teksta */
   --color-selected: #4ce0b3; /* boja za aktivan tab */
 }
+
 ion-toolbar {
   --background: #262626 !important;
   --color: #ffffff !important; /* boja teksta i ikonica u toolbaru */
 }
+
 ion-button {
   --background: #028090 !important;
   --color: #ffffff !important; /* boja teksta/ikonica na dugmetu */
   border-radius: 12px; /* ili po želji */
 }
+
 .center-spinner {
   display: flex;
   align-items: center;
@@ -70,12 +77,39 @@ ion-button {
   padding: 24px;
   width: 100%;
 }
+
 .fullscreen-spinner {
   position: fixed;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,.05);
+  background: rgba(0, 0, 0, .05);
   z-index: 9999;
+}
+
+/* ============================================================
+   Globalni "odmak" teksta unutar input polja po celoj aplikaciji
+   ============================================================ */
+
+:root {
+  --field-x-padding: 12px; // promeni po potrebi: 8–16px
+}
+
+/* Ionic kontrole u Shadow DOM-u (koristimo ::part) */
+ion-input::part(native),
+ion-textarea::part(native),
+ion-searchbar::part(native),
+ion-select::part(text),
+ion-datetime::part(native) {
+  padding-inline-start: var(--field-x-padding);
+  padding-inline-end: var(--field-x-padding);
+}
+
+/* Fallback za obicne HTML kontrole, ako se negde koriste */
+input:not([type="checkbox"]):not([type="radio"]),
+textarea,
+select {
+  padding-inline: var(--field-x-padding);
+  box-sizing: border-box;
 }
